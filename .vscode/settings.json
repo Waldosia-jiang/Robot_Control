@@ -57,5 +57,8 @@
         "/opt/ros/noetic/lib/python3/dist-packages",
         "/home/wheeltec/PythonRobotics/src"
     ],
-    "cmake.sourceDirectory": "/home/wheeltec/Robot_Control/src/pure_pursuit"
+    "cmake.sourceDirectory": "/home/wheeltec/Robot_Control/src/pure_pursuit",
+    "files.associations": {
+        "ostream": "cpp"
+    }
 }

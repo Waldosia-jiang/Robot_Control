@@ -15,9 +15,13 @@ set(CMAKE_MAKEFILE_DEPENDS
   "catkin_generated/order_packages.cmake"
   "pure_pursuit/catkin_generated/ordered_paths.cmake"
   "pure_pursuit/catkin_generated/package.cmake"
+  "stanley_controller/catkin_generated/ordered_paths.cmake"
+  "stanley_controller/catkin_generated/package.cmake"
   "/home/wheeltec/Robot_Control/src/CMakeLists.txt"
   "/home/wheeltec/Robot_Control/src/pure_pursuit/CMakeLists.txt"
   "/home/wheeltec/Robot_Control/src/pure_pursuit/package.xml"
+  "/home/wheeltec/Robot_Control/src/stanley_controller/CMakeLists.txt"
+  "/home/wheeltec/Robot_Control/src/stanley_controller/package.xml"
   "/opt/ros/noetic/share/catkin/cmake/all.cmake"
   "/opt/ros/noetic/share/catkin/cmake/assert.cmake"
   "/opt/ros/noetic/share/catkin/cmake/atomic_configure_file.cmake"
@@ -190,6 +194,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "gtest/googlemock/CMakeFiles/CMakeDirectoryInformation.cmake"
   "gtest/googletest/CMakeFiles/CMakeDirectoryInformation.cmake"
   "pure_pursuit/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "stanley_controller/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
@@ -229,4 +234,5 @@ set(CMAKE_DEPEND_INFO_FILES
   "pure_pursuit/CMakeFiles/geometry_msgs_generate_messages_eus.dir/DependInfo.cmake"
   "pure_pursuit/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/DependInfo.cmake"
   "pure_pursuit/CMakeFiles/roscpp_generate_messages_eus.dir/DependInfo.cmake"
+  "stanley_controller/CMakeFiles/stanley_controller_node.dir/DependInfo.cmake"
   )

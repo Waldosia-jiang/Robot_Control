@@ -1,40 +1,18 @@
-_pursuit.cpp:6:
-/home/wheeltec/Robot_Control/src/pure_pursuit/include/matplotlibcpp.h:1358:6: note: candidate: ‘template<class NumericX, class NumericY> bool matplotlibcpp::plot(const std::vector<Numeric>&, const std::vector<NumericY>&, const string&)’
- 1358 | bool plot(const std::vector<NumericX>& x, const std::vector<NumericY>& y, const std::string& s = "")
-      |      ^~~~
-/home/wheeltec/Robot_Control/src/pure_pursuit/include/matplotlibcpp.h:1358:6: note:   template argument deduction/substitution failed:
-In file included from /home/wheeltec/Robot_Control/src/pure_pursuit/src/pure_pursuit.cpp:6:
-/home/wheeltec/Robot_Control/src/pure_pursuit/include/matplotlibcpp.h:2865:90: note:   ‘std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >’ is not derived from ‘const std::vector<Numeric>’
- 2865 |     return detail::plot_impl<typename detail::is_callable<B>::type>()(a,b,format) && plot(args...);
-      |                                                                                      ~~~~^~~~~~~~~
-/home/wheeltec/Robot_Control/src/pure_pursuit/include/matplotlibcpp.h:1810:6: note: candidate: ‘template<class Numeric> bool matplotlibcpp::plot(const std::vector<Numeric>&, const string&)’
- 1810 | bool plot(const std::vector<Numeric>& y, const std::string& format = "")
-      |      ^~~~
-/home/wheeltec/Robot_Control/src/pure_pursuit/include/matplotlibcpp.h:1810:6: note:   template argument deduction/substitution failed:
-/home/wheeltec/Robot_Control/src/pure_pursuit/include/matplotlibcpp.h:2865:90: note:   ‘std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >’ is not derived from ‘const std::vector<Numeric>’
- 2865 |     return detail::plot_impl<typename detail::is_callable<B>::type>()(a,b,format) && plot(args...);
-      |                                                                                      ~~~~^~~~~~~~~
-/home/wheeltec/Robot_Control/src/pure_pursuit/include/matplotlibcpp.h:1818:6: note: candidate: ‘template<class Numeric> bool matplotlibcpp::plot(const std::vector<Numeric>&, const std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’
- 1818 | bool plot(const std::vector<Numeric>& y, const std::map<std::string, std::string>& keywords)
-      |      ^~~~
-/home/wheeltec/Robot_Control/src/pure_pursuit/include/matplotlibcpp.h:1818:6: note:   template argument deduction/substitution failed:
-/home/wheeltec/Robot_Control/src/pure_pursuit/include/matplotlibcpp.h:2865:90: note:   ‘std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >’ is not derived from ‘const std::vector<Numeric>’
- 2865 |     return detail::plot_impl<typename detail::is_callable<B>::type>()(a,b,format) && plot(args...);
-      |                                                                                      ~~~~^~~~~~~~~
-/home/wheeltec/Robot_Control/src/pure_pursuit/include/matplotlibcpp.h:2860:6: note: candidate: ‘template<class ... Args> bool matplotlibcpp::plot()’
- 2860 | bool plot() { return true; }
-      |      ^~~~
-/home/wheeltec/Robot_Control/src/pure_pursuit/include/matplotlibcpp.h:2860:6: note:   template argument deduction/substitution failed:
-/home/wheeltec/Robot_Control/src/pure_pursuit/include/matplotlibcpp.h:2865:90: note:   candidate expects 0 arguments, 1 provided
- 2865 |     return detail::plot_impl<typename detail::is_callable<B>::type>()(a,b,format) && plot(args...);
-      |                                                                                      ~~~~^~~~~~~~~
-/home/wheeltec/Robot_Control/src/pure_pursuit/include/matplotlibcpp.h:2863:6: note: candidate: ‘template<class A, class B, class ... Args> bool matplotlibcpp::plot(const A&, const B&, const string&, Args ...)’
- 2863 | bool plot(const A& a, const B& b, const std::string& format, Args... args)
-      |      ^~~~
-/home/wheeltec/Robot_Control/src/pure_pursuit/include/matplotlibcpp.h:2863:6: note:   template argument deduction/substitution failed:
-/home/wheeltec/Robot_Control/src/pure_pursuit/include/matplotlibcpp.h:2865:90: note:   candidate expects at least 3 arguments, 1 provided
- 2865 |     return detail::plot_impl<typename detail::is_callable<B>::type>()(a,b,format) && plot(args...);
-      |                                                                                      ~~~~^~~~~~~~~
-make[2]: *** [pure_pursuit/CMakeFiles/pure_pursuit_node.dir/build.make:63：pure_pursuit/CMakeFiles/pure_pursuit_node.dir/src/pure_pursuit.cpp.o] 错误 1
-make[1]: *** [CMakeFiles/Makefile2:779：pure_pursuit/CMakeFiles/pure_pursuit_node.dir/all] 错误 2
+/home/wheeltec/Robot_Control/src/stanley_controller/src/stanley_controller.cpp: In function ‘std::pair<double, int> stanley_control(const State&, const std::vector<double>&, const std::vector<double>&, const std::vector<double>&, int)’:
+/home/wheeltec/Robot_Control/src/stanley_controller/src/stanley_controller.cpp:83:10: warning: structured bindings only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   83 |     auto [current_target_idx, error_front_axle] = calc_target_index(state, cx, cy);
+      |          ^
+/home/wheeltec/Robot_Control/src/stanley_controller/src/stanley_controller.cpp: In function ‘void main_simulation()’:
+/home/wheeltec/Robot_Control/src/stanley_controller/src/stanley_controller.cpp:143:10: error: ‘rc’ is not a member of ‘plt’
+  143 |     plt::rc("font", {{"family", "SimHei"}}); // 使用 SimHei 字体（需确保系统中已安装）
+      |          ^~
+/home/wheeltec/Robot_Control/src/stanley_controller/src/stanley_controller.cpp:144:10: error: ‘rc’ is not a member of ‘plt’
+  144 |     plt::rc("axes", {{"unicode_minus", "False"}}); // 避免负号显示问题
+      |          ^~
+/home/wheeltec/Robot_Control/src/stanley_controller/src/stanley_controller.cpp:184:18: warning: structured bindings only available with ‘-std=c++17’ or ‘-std=gnu++17’
+  184 |             auto [di, new_target_idx] = stanley_control(state, cx, cy, cyaw, target_idx);
+      |                  ^
+make[2]: *** [stanley_controller/CMakeFiles/stanley_controller_node.dir/build.make:63：stanley_controller/CMakeFiles/stanley_controller_node.dir/src/stanley_controller.cpp.o] 错误 1
+make[1]: *** [CMakeFiles/Makefile2:1151：stanley_controller/CMakeFiles/stanley_controller_node.dir/all] 错误 2
 make: *** [Makefile:141：all] 错误 2
+Invoking "make -j6 -l6" failed

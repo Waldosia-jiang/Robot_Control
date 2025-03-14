@@ -55,12 +55,14 @@ CMAKE_BINARY_DIR = /home/wheeltec/Robot_Control/build
 # The main recursive "all" target.
 all: gtest/all
 all: pure_pursuit/all
+all: stanley_controller/all
 
 .PHONY : all
 
 # The main recursive "preinstall" target.
 preinstall: gtest/preinstall
 preinstall: pure_pursuit/preinstall
+preinstall: stanley_controller/preinstall
 
 .PHONY : preinstall
 
@@ -72,6 +74,7 @@ clean: CMakeFiles/tests.dir/clean
 clean: CMakeFiles/download_extra_data.dir/clean
 clean: gtest/clean
 clean: pure_pursuit/clean
+clean: stanley_controller/clean
 
 .PHONY : clean
 
@@ -174,6 +177,24 @@ pure_pursuit/clean: pure_pursuit/CMakeFiles/rosgraph_msgs_generate_messages_cpp.
 pure_pursuit/clean: pure_pursuit/CMakeFiles/roscpp_generate_messages_eus.dir/clean
 
 .PHONY : pure_pursuit/clean
+
+#=============================================================================
+# Directory level rules for directory stanley_controller
+
+# Recursive "all" directory target.
+stanley_controller/all: stanley_controller/CMakeFiles/stanley_controller_node.dir/all
+
+.PHONY : stanley_controller/all
+
+# Recursive "preinstall" directory target.
+stanley_controller/preinstall:
+
+.PHONY : stanley_controller/preinstall
+
+# Recursive "clean" directory target.
+stanley_controller/clean: stanley_controller/CMakeFiles/stanley_controller_node.dir/clean
+
+.PHONY : stanley_controller/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/doxygen.dir
@@ -1120,6 +1141,33 @@ roscpp_generate_messages_eus: pure_pursuit/CMakeFiles/roscpp_generate_messages_e
 pure_pursuit/CMakeFiles/roscpp_generate_messages_eus.dir/clean:
 	$(MAKE) -f pure_pursuit/CMakeFiles/roscpp_generate_messages_eus.dir/build.make pure_pursuit/CMakeFiles/roscpp_generate_messages_eus.dir/clean
 .PHONY : pure_pursuit/CMakeFiles/roscpp_generate_messages_eus.dir/clean
+
+#=============================================================================
+# Target rules for target stanley_controller/CMakeFiles/stanley_controller_node.dir
+
+# All Build rule for target.
+stanley_controller/CMakeFiles/stanley_controller_node.dir/all:
+	$(MAKE) -f stanley_controller/CMakeFiles/stanley_controller_node.dir/build.make stanley_controller/CMakeFiles/stanley_controller_node.dir/depend
+	$(MAKE) -f stanley_controller/CMakeFiles/stanley_controller_node.dir/build.make stanley_controller/CMakeFiles/stanley_controller_node.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/wheeltec/Robot_Control/build/CMakeFiles --progress-num=11,12 "Built target stanley_controller_node"
+.PHONY : stanley_controller/CMakeFiles/stanley_controller_node.dir/all
+
+# Build rule for subdir invocation for target.
+stanley_controller/CMakeFiles/stanley_controller_node.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wheeltec/Robot_Control/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 stanley_controller/CMakeFiles/stanley_controller_node.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wheeltec/Robot_Control/build/CMakeFiles 0
+.PHONY : stanley_controller/CMakeFiles/stanley_controller_node.dir/rule
+
+# Convenience name for target.
+stanley_controller_node: stanley_controller/CMakeFiles/stanley_controller_node.dir/rule
+
+.PHONY : stanley_controller_node
+
+# clean rule for target.
+stanley_controller/CMakeFiles/stanley_controller_node.dir/clean:
+	$(MAKE) -f stanley_controller/CMakeFiles/stanley_controller_node.dir/build.make stanley_controller/CMakeFiles/stanley_controller_node.dir/clean
+.PHONY : stanley_controller/CMakeFiles/stanley_controller_node.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

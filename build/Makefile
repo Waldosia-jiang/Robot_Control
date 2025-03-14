@@ -622,6 +622,19 @@ roscpp_generate_messages_eus/fast:
 	$(MAKE) -f pure_pursuit/CMakeFiles/roscpp_generate_messages_eus.dir/build.make pure_pursuit/CMakeFiles/roscpp_generate_messages_eus.dir/build
 .PHONY : roscpp_generate_messages_eus/fast
 
+#=============================================================================
+# Target rules for targets named stanley_controller_node
+
+# Build rule for target.
+stanley_controller_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 stanley_controller_node
+.PHONY : stanley_controller_node
+
+# fast build rule for target.
+stanley_controller_node/fast:
+	$(MAKE) -f stanley_controller/CMakeFiles/stanley_controller_node.dir/build.make stanley_controller/CMakeFiles/stanley_controller_node.dir/build
+.PHONY : stanley_controller_node/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -670,6 +683,7 @@ help:
 	@echo "... geometry_msgs_generate_messages_eus"
 	@echo "... rosgraph_msgs_generate_messages_cpp"
 	@echo "... roscpp_generate_messages_eus"
+	@echo "... stanley_controller_node"
 .PHONY : help
 
 
