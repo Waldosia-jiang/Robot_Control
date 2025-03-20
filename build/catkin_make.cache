@@ -1,2 +1,2 @@
 pure_pursuit:stanley_controller
--DCATKIN_DEVEL_PREFIX=/home/wheeltec/Robot_Control/devel -DCMAKE_INSTALL_PREFIX=/home/wheeltec/Robot_Control/install -G Unix Makefiles
+-DCMAKE_BUILD_TYPE=RelWithDebInfo -DCATKIN_DEVEL_PREFIX=/home/wheeltec/Robot_Control/devel -DCMAKE_INSTALL_PREFIX=/home/wheeltec/Robot_Control/install -G Unix Makefiles
