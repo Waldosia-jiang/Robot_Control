@@ -13,7 +13,7 @@ const double Lfc = 2.0;     // 基础前视距离 [m]，确保低速时有足够
 const double Kp = 1.0;      // 速度比例增益，用于比例控制加速度
 const double dt = 0.1;      // 时间步长 [s]，模拟的时间分辨率
 const double WB = 2.9;      // 车辆轴距 [m]，车辆前后轮之间的距离
-const double max_lat_acc = 2.0; // 最大横向加速度 [m/s^2]，限制转弯时的速度
+const double max_lat_acc = 1.5; // 最大横向加速度 [m/s^2]，限制转弯时的速度
 const double initial_target_speed = 10.0 / 3.6; // 初始目标速度 [m/s]，转换为 10 km/h
 const bool show_animation = true; // 是否显示动画，用于实时可视化
 
@@ -196,7 +196,7 @@ void mainSimulation() {
             plt::plot({cx[target_ind]}, {cy[target_ind]}, keywords_target); // 绘制目标点（绿色x）
             plt::axis("equal"); // 设置坐标轴等比例
             plt::grid(true);    // 显示网格
-            plt::title("速度[km/h]: " + std::to_string(state.v * 3.6).substr(0, 4)); // 显示当前速度
+            plt::title("Speed[km/h]: " + std::to_string(state.v * 3.6).substr(0, 4)); // 显示当前速度（英文）
             plt::pause(0.001);  // 暂停以显示动画帧
         }
     }
@@ -218,8 +218,8 @@ void mainSimulation() {
         std::vector<double> speed_kmh(states.v.size()); // 速度转换为km/h
         for (size_t i = 0; i < states.v.size(); ++i) speed_kmh[i] = states.v[i] * 3.6;
         plt::plot(states.t, speed_kmh, keywords_speed); // 绘制速度-时间曲线
-        plt::xlabel("时间[s]"); // x轴标签
-        plt::ylabel("速度[km/h]"); // y轴标签
+        plt::xlabel("Time[s]"); // x轴标签
+        plt::ylabel("Speed[km/h]"); // y轴标签
         plt::grid(true);     // 显示网格
         plt::show();         // 显示所有图形
     }
@@ -227,7 +227,7 @@ void mainSimulation() {
 
 // 主函数，程序入口
 int main() {
-    std::cout << "Pure pursuit路径跟踪模拟开始" << std::endl; // 打印开始信息
+    std::cout << "Pure pursuit path tracking simulation start" << std::endl; // 打印开始信息
     mainSimulation(); // 运行主模拟函数
     return 0;         // 程序正常退出
 }

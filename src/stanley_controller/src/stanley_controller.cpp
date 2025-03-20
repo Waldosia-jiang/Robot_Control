@@ -3,17 +3,19 @@
 #include <cmath>
 #include <algorithm>
 #include <map>
-#include <matplotlibcpp.h>
+#include "matplotlibcpp.h"
 
 namespace plt = matplotlibcpp;
 
 // 参数定义（全局常量）
-const double k = 0.5;         // Stanley 控制增益，调节横向误差对转向的影响
+const double k = 1.0;         // Stanley 控制增益，调节横向误差对转向的影响
 const double Kp = 1.0;        // PID 速度控制比例增益
 const double dt = 0.1;        // 时间步长 [s]，模拟的采样周期
 const double L = 2.9;         // 车辆轴距 [m]，用于运动学模型
 const double max_steer = M_PI / 6.0; // 最大转向角 [rad]，约 30 度
 const double approach_threshold = 0.5; // 靠近目标点的距离阈值 [m]，决定何时切换到跟踪
+const double max_lat_acc = 3.0; // 最大横向加速度 [m/s^2]，用于转弯速度限制
+const double initial_target_speed = 10.0 / 3.6; // 初始目标速度 [m/s]，10 km/h
 const bool show_animation = true; // 是否显示实时动画
 
 #ifndef M_PI
@@ -59,6 +61,13 @@ public:
 // PID 速度控制：简单比例控制，计算加速度
 double pid_control(double target, double current) {
     return Kp * (target - current); // 比例控制输出加速度
+}
+
+// 计算基于转弯半径的最大速度，限制转弯时的速度
+double calc_max_speed(double delta) {
+    if (std::fabs(delta) < 1e-5) return initial_target_speed; // 如果转向角很小（接近直线），返回初始目标速度
+    double R = L / std::tan(delta); // 计算转弯半径，基于单车模型
+    return std::sqrt(max_lat_acc * std::fabs(R)); // 返回最大速度，v_max = sqrt(a_lat_max * |R|)
 }
 
 // 计算目标点索引和前轴横向误差
@@ -114,20 +123,12 @@ double simple_steering_control(const State& state, double target_x, double targe
     return std::atan2(2.0 * L * std::sin(yaw_error), 1.0); // 简单几何转向公式
 }
 
-// 生成参考路径：近似直线带轻微波动
-void generate_wiggly_straight_path(std::vector<double>& cx, std::vector<double>& cy, std::vector<double>& cyaw) {
-    const double total_length = 50.0; // 路径总长度 [m]
-    const double ds = 0.05;           // 采样间隔 [m]
-    const double slope = 0.1;         // 基础直线斜率
-    const double wiggle_amplitude = 1.0; // 波动幅度 [m]
-    const double wiggle_freq = 0.2;     // 波动频率 [rad/m]
-
-    // 生成路径点
-    for (double t = 0; t <= total_length; t += ds) {
-        double x = t;
-        double y = slope * t + wiggle_amplitude * std::sin(wiggle_freq * t); // y = mx + A*sin(ωx)
+// 生成参考路径：与 Pure Pursuit 相同的正弦路径
+void generate_reference_path(std::vector<double>& cx, std::vector<double>& cy, std::vector<double>& cyaw) {
+    // 生成与 Pure Pursuit 相同的正弦路径
+    for (double x = 0; x < 50; x += 0.5) {
         cx.push_back(x);
-        cy.push_back(y);
+        cy.push_back(std::sin(x / 5.0) * x / 2.0); // y = sin(x/5) * x/2
     }
 
     // 计算路径方向（航向角）
@@ -144,25 +145,24 @@ void generate_wiggly_straight_path(std::vector<double>& cx, std::vector<double>&
     cyaw_smooth[0] = cyaw[0];
     cyaw_smooth.back() = cyaw.back();
     for (size_t i = 1; i < cx.size() - 1; ++i) {
-        cyaw_smooth[i] = (cyaw[i - 1] + cyaw[i] + cyaw[i + 1]) / 3.0; // 三点平均
+        cyaw_smooth[i] = (cyaw[i - 1] + cyaw[i] + cyaw[i + 1]) / 3.0; // 三点平均平滑
     }
     cyaw = cyaw_smooth;
+}
 
-    // 输出路径前 5 个点，用于调试
-    std::cout << "First 5 path points:" << std::endl;
-    for (size_t i = 0; i < std::min<size_t>(5, cx.size()); ++i) {
-        std::cout << "x: " << cx[i] << ", y: " << cy[i] << ", yaw: " << cyaw[i] << std::endl;
-    }
+// 绘制箭头：显示车辆位置和航向
+void plot_arrow(double x, double y, double yaw, double length = 1.0) {
+    std::vector<double> x_vec = {x, x + length * std::cos(yaw)}; // 箭头起止点的 x 坐标
+    std::vector<double> y_vec = {y, y + length * std::sin(yaw)}; // 箭头起止点的 y 坐标
+    plt::plot(x_vec, y_vec, "r-"); // 绘制箭身（红线）
+    plt::plot({x}, {y}, "ro");     // 绘制起点（红点）
 }
 
 // 主模拟函数：执行路径跟踪模拟
 void main_simulation() {
     // 生成参考路径
     std::vector<double> cx, cy, cyaw;
-    generate_wiggly_straight_path(cx, cy, cyaw);
-
-    double target_speed = 30.0 / 3.6; // 目标速度 [m/s]，30 km/h 转换为 m/s
-    double max_simulation_time = 100.0; // 最大模拟时间 [s]
+    generate_reference_path(cx, cy, cyaw);
 
     State state(-0.0, -3.0, 0.0, 0.0); // 初始状态：位置 (-0, -3)，航向 0，速度 0
 
@@ -179,26 +179,38 @@ void main_simulation() {
     std::cout << "Initial target index: " << target_idx << ", coordinates: (" << cx[target_idx] << ", " << cy[target_idx] << ")" << std::endl;
 
     // 主模拟循环
-    while (max_simulation_time >= time && (!is_tracking || last_idx > target_idx)) {
-        double ai = pid_control(target_speed, state.v); // 计算加速度，保持目标速度
-
+    while (time < 100.0 && (!is_tracking || last_idx > target_idx)) {
+        // 计算转向角
+        double delta;
         if (!is_tracking) {
             // 靠近阶段：动态更新目标点并移动到最近点
             target_idx = calc_target_index(state, cx, cy).first;
-            double delta = simple_steering_control(state, cx[target_idx], cy[target_idx]); // 计算简单转向角
-            state.update(ai, delta); // 更新车辆状态
+            delta = simple_steering_control(state, cx[target_idx], cy[target_idx]); // 计算简单转向角
+        } else {
+            // Stanley 跟踪阶段：使用 Stanley 控制跟踪路径
+            auto [di, new_target_idx] = stanley_control(state, cx, cy, cyaw, target_idx);
+            delta = di;
+            target_idx = new_target_idx; // 更新目标点索引
+        }
 
+        // 根据转弯半径计算最大速度，并限制目标速度
+        double max_speed = calc_max_speed(delta);
+        double target_speed = std::min(initial_target_speed, max_speed);
+
+        // 计算加速度
+        double ai = pid_control(target_speed, state.v);
+
+        // 更新车辆状态
+        state.update(ai, delta);
+
+        // 检查是否进入跟踪模式
+        if (!is_tracking) {
             double dist_to_target = state.distance_to(cx[target_idx], cy[target_idx]); // 计算到目标点的距离
             if (dist_to_target < approach_threshold) {
                 is_tracking = true; // 距离足够近，切换到跟踪模式
                 std::cout << "Reached target " << target_idx << " (" << cx[target_idx] << ", " << cy[target_idx] 
                           << "), starting path tracking" << std::endl;
             }
-        } else {
-            // Stanley 跟踪阶段：使用 Stanley 控制跟踪路径
-            auto [di, new_target_idx] = stanley_control(state, cx, cy, cyaw, target_idx);
-            target_idx = new_target_idx; // 更新目标点索引
-            state.update(ai, di); // 更新车辆状态
         }
 
         time += dt; // 时间递增
@@ -217,6 +229,7 @@ void main_simulation() {
             plt::plot(x, y, keywords_traj); // 绘制车辆轨迹（蓝线）
             std::map<std::string, std::string> keywords_target = {{"label", "target"}, {"marker", "x"}, {"color", "green"}};
             plt::plot({cx[target_idx]}, {cy[target_idx]}, keywords_target); // 绘制目标点（绿叉）
+            plot_arrow(state.x, state.y, state.yaw); // 绘制航向箭头
             plt::axis("equal"); // 设置坐标轴等比例
             plt::grid(true); // 显示网格
             plt::xlabel("X [m]"); // x 轴标签
@@ -228,8 +241,10 @@ void main_simulation() {
     }
 
     // 检查是否到达终点
-    if (last_idx < target_idx) {
-        std::cerr << "Failed to reach target" << std::endl;
+    if (last_idx <= target_idx) {
+        std::cout << "Reached the end of the path!" << std::endl;
+    } else {
+        std::cerr << "Failed to reach the end of the path" << std::endl;
     }
 
     // 最终结果可视化
